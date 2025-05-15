@@ -2,26 +2,36 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZERO - Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>สุขสันต์วันเกิด อินอิน 💖</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <h1>สวัสดี! ผมชื่อ ZERO</h1>
-    <p>นักออกแบบที่หลงใหลในความทันสมัย</p>
-  </header>
-  <section>
-    <h2>ผลงานเด่น</h2>
-    <ul>
-      <li>🖌️ งานออกแบบ UI/UX</li>
-      <li>🎨 วาดการ์ตูน Chibi</li>
-      <li>📱 แอป React Native</li>
-    </ul>
-  </section>
-  <footer>
-    <p>ติดต่อ: zero@example.com</p>
-  </footer>
+  <div class="container">
+    <h1>สุขสันต์วันเกิด อินอิน 💖</h1>
+    <p>ขอให้คบกันนาน ๆ แฟนไม่งอนบ่อย รักแฟนที่สุดดดด~</p>
+    <img src="inin.jpg" alt="อินอิน" class="photo"/>
+    <audio controls autoplay loop>
+      <source src="cafe.mp3" type="audio/mpeg">
+      เพลงโหลดไม่ได้ :(
+    </audio>
+  </div>
+
+  <script>
+    // เอฟเฟกต์หัวใจลอย
+    document.addEventListener("click", () => {
+      const heart = document.createElement("div");
+      heart.textContent = "💖";
+      heart.style.position = "absolute";
+      heart.style.top = Math.random() * window.innerHeight + "px";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.fontSize = "30px";
+      heart.style.pointerEvents = "none";
+      heart.style.opacity = "0.8";
+      heart.style.animation = "fadeUp 2s ease-out forwards";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 2000);
+    });
+  </script>
 </body>
 </html>
-
