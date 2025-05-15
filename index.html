@@ -7,18 +7,19 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>สุขสันต์วันเกิด อินอิน 💖</h1>
-    <p>ขอให้คบกันนาน ๆ แฟนไม่งอนบ่อย รักแฟนที่สุดดดด~</p>
-    <img src="inin.jpg" alt="อินอิน" class="photo"/>
-    <audio controls autoplay loop>
-      <source src="cafe.mp3" type="audio/mpeg">
-      เพลงโหลดไม่ได้ :(
-    </audio>
+  <div class="overlay">
+    <div class="container">
+      <h1>สุขสันต์วันเกิด อินอิน 💖</h1>
+      <p>ขอให้คบกันนาน ๆ แฟนไม่งอนบ่อย รักแฟนที่สุดดดด~</p>
+      <img src="inin.jpg" alt="อินอิน" class="photo"/>
+      <audio controls autoplay loop>
+        <source src="cafe.mp3" type="audio/mpeg">
+        เพลงโหลดไม่ได้ :(
+      </audio>
+    </div>
   </div>
 
   <script>
-    // เอฟเฟกต์หัวใจลอย
     document.addEventListener("click", () => {
       const heart = document.createElement("div");
       heart.textContent = "💖";
