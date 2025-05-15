@@ -1,10 +1,20 @@
 body {
-  background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
+  margin: 0;
+  padding: 0;
   font-family: 'Sarabun', sans-serif;
-  text-align: center;
-  padding: 40px;
   color: #333;
   overflow-x: hidden;
+  background: url('https://i.pinimg.com/originals/04/2a/ef/042aefaccd947a8c07f36b11f228ba2e.gif') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.overlay {
+  background-color: rgba(255, 255, 255, 0.7);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
 }
 
 .container {
@@ -13,7 +23,8 @@ body {
   border-radius: 20px;
   box-shadow: 0 0 20px rgba(255, 192, 203, 0.6);
   max-width: 500px;
-  margin: auto;
+  width: 100%;
+  text-align: center;
   position: relative;
   z-index: 2;
 }
