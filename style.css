@@ -1,21 +1,41 @@
 body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f0f4f8;
+  background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
+  font-family: 'Sarabun', sans-serif;
+  text-align: center;
+  padding: 40px;
   color: #333;
+  overflow-x: hidden;
 }
-header {
-  background: #282c34;
-  color: white;
-  text-align: center;
-  padding: 50px 20px;
-}
-section {
+
+.container {
+  background: white;
   padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 192, 203, 0.6);
+  max-width: 500px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
 }
-footer {
-  text-align: center;
-  padding: 20px;
-  background: #ddd;
+
+.photo {
+  max-width: 100%;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+audio {
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+@keyframes fadeUp {
+  0% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
 }
