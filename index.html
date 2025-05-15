@@ -11,35 +11,97 @@
     <div class="container">
       <h1>สุขสันต์วันเกิด น้องอินอิน 💖</h1>
       <p>ขอให้คบกันนาน ๆ แฟนไม่งอนบ่อย รักแฟนที่สุดดดด~</p>
-      <img src="inin.jpg" alt="อินอิน" class="photo"/>
+      <img src="inin.png" alt="อินอิน" class="photo"/>
+  <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-left" />
+  <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-right" />
+
+      <!-- ปุ่มเล่นเพลง -->
+      <button id="playButton">กดเพื่อเล่นเพลง 🎵</button>
+<button id="giftBtn">🎁 รับของขวัญ</button>
+
+<!-- กล่องของขวัญ + เอฟเฟกต์ -->
+<div class="gift-scene" id="giftScene">
+  <img src="https://images.icon-icons.com/2639/PNG/512/gif_box_icon_159270.png" alt="กล่องของขวัญ" class="gift-box" />
+  <div class="flash"></div>
+  <img src="gift.png" alt="ของขวัญ" class="gift-result" />
+</div>
+      <!-- YouTube iframe ซ่อนไว้ก่อน -->
+      <div id="playerContainer" class="music" style="display:none;">
+        <iframe
+          id="ytplayer"
+          width="0"
+          height="0"
+          src=""
+          frameborder="0"
+          allow="autoplay"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   </div>
 
-  <!-- เพลงจาก YouTube เล่นอัตโนมัติ -->
-  <div class="music">
-    <iframe
-      width="0"
-      height="0"
-      src="https://www.youtube.com/watch?v=N9bashij_7c"
-      frameborder="0"
-      allow="autoplay"
-    ></iframe>
-  </div>
-
   <script>
-    document.addEventListener("click", () => {
-      const heart = document.createElement("div");
-      heart.textContent = "💖";
-      heart.style.position = "absolute";
-      heart.style.top = Math.random() * window.innerHeight + "px";
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.fontSize = "30px";
-      heart.style.pointerEvents = "none";
-      heart.style.opacity = "0.8";
-      heart.style.animation = "fadeUp 2s ease-out forwards";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 2000);
-    });
-  </script>
+  // ปุ่มเล่นเพลง
+  document.getElementById("playButton").addEventListener("click", () => {
+    const player = document.getElementById("ytplayer");
+    player.src = "https://www.youtube.com/embed/N9bashij_7c?autoplay=1";
+    document.getElementById("playerContainer").style.display = "block";
+    document.getElementById("playButton").style.display = "none"; // ซ่อนปุ่มหลังคลิก
+  });
+
+  // เอฟเฟกต์หัวใจ
+  document.addEventListener("click", (e) => {
+    const heart = document.createElement("div");
+    heart.textContent = "💖";
+    heart.style.position = "absolute";
+    heart.style.top = e.clientY + "px";
+    heart.style.left = e.clientX + "px";
+    heart.style.fontSize = "30px";
+    heart.style.pointerEvents = "none";
+    heart.style.opacity = "0.8";
+    heart.style.animation = "fadeUp 2s ease-out forwards";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+  });
+
+  // ปุ่มเปิดกล่องของขวัญ
+  document.getElementById("giftBtn").addEventListener("click", () => {
+    const scene = document.getElementById("giftScene");
+    const result = scene.querySelector(".gift-result");
+    const flash = scene.querySelector(".flash");
+    const box = scene.querySelector(".gift-box");
+
+    // แสดงฉาก
+    scene.style.display = "flex";
+
+    // reset state
+    result.style.display = "none";
+    result.style.opacity = 0;
+    flash.style.animation = "none";
+    box.style.animation = "shakeFancy 1.5s ease-in-out";
+
+    // แสงวาบหลัง 1.5s
+    setTimeout(() => {
+      flash.style.animation = "flashGlow 1.5s ease-out forwards";
+    }, 1500);
+
+    // แสดง me.png หลัง 2.7s พร้อมผูก event
+    setTimeout(() => {
+      result.style.display = "block";
+      result.style.animation = "riseAndFade 1.5s ease-out forwards";
+
+      result.onclick = () => {
+        scene.style.animation = "fadeOut 0.6s ease-out forwards";
+        setTimeout(() => {
+          scene.style.display = "none";
+          scene.style.animation = "";
+          result.style.display = "none";
+          result.style.animation = "";
+          flash.style.animation = "none";
+        }, 600);
+      };
+    }, 2700);
+  });
+</script>
 </body>
 </html>
