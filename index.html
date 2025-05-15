@@ -16,7 +16,12 @@
   <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-right" />
 
       <!-- ปุ่มเล่นเพลง -->
-      <button id="playButton">กดเพื่อเล่นเพลง 🎵</button>
+      <!-- ปุ่มเล่นเพลง -->
+<button id="playButton">กดเพื่อเล่นเพลง 🎵</button>
+
+<!-- ลบ iframe YouTube และใช้ audio แทน -->
+<audio id="bgm" src="music.mp3" loop></audio>
+
 <button id="giftBtn">🎁 รับของขวัญ</button>
 
 <!-- กล่องของขวัญ + เอฟเฟกต์ -->
@@ -42,12 +47,16 @@
 
   <script>
   // ปุ่มเล่นเพลง
-  document.getElementById("playButton").addEventListener("click", () => {
-    const player = document.getElementById("ytplayer");
-    player.src = "https://www.youtube.com/embed/N9bashij_7c?autoplay=1";
-    document.getElementById("playerContainer").style.display = "block";
-    document.getElementById("playButton").style.display = "none"; // ซ่อนปุ่มหลังคลิก
+  // ปุ่มเล่นเพลงด้วยไฟล์ mp3
+document.getElementById("playButton").addEventListener("click", () => {
+  const bgm = document.getElementById("bgm");
+  bgm.play().catch((err) => {
+    alert("ไม่สามารถเล่นเพลงได้ อาจต้องคลิกอีกครั้งหรือเบราว์เซอร์บล็อกไว้");
+    console.error(err);
   });
+  document.getElementById("playButton").style.display = "none"; // ซ่อนปุ่มหลังคลิก
+});
+
 
   // เอฟเฟกต์หัวใจ
   document.addEventListener("click", (e) => {
