@@ -204,4 +204,133 @@ button#playButton:hover {
     opacity: 0;
   }
 }
+#intro-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: black;
+  color: white;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 2s ease;
+}
 
+#startBtn {
+  font-size: 24px;
+  padding: 10px 30px;
+  background: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  animation: fadeIn 2s ease;
+}
+
+#birthdayCake {
+  width: 400px;
+  opacity: 0;
+  margin-top: 20px;
+  transition: opacity 5s ease;
+}
+
+#wishText {
+  font-size: 24px;
+  opacity: 0;
+  margin-top: 20px;
+  transition: opacity 2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.birthday-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  padding: 40px 60px;
+  background: white;
+  border-radius: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff1493;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+  z-index: 9999;
+  animation: popupGrow 1s ease forwards;
+}
+
+@keyframes popupGrow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+body.transitioning {
+  transition: background 2s ease;
+}
+#fireworkOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://i.pinimg.com/originals/b7/38/85/b738852f3a04af828898babb2c2c063d.gif') center center no-repeat;
+  background-size: cover;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+body.bg-transition {
+  transition: background 1.5s ease;
+}
+
+.birthday-popup {
+  animation: popupGrow 1s ease forwards;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  padding: 40px 60px;
+  background: white;
+  border-radius: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff1493;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+  z-index: 9999;
+}
+
+@keyframes popupGrow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+#blackOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  z-index: 10000; /* ซ้อนบนสุดเหนือทุกอย่าง */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
