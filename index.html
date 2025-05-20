@@ -118,18 +118,12 @@ function startMicDetection() {
       const volume = Math.sqrt(sum / dataArray.length) * 100;
 
       if (volume > threshold && !detected) {
-  detected = true;
-
-  // 🛑 ปิดไมค์ทันทีหลังเป่า
-  stream.getTracks().forEach(track => track.stop());
-
-  showBirthdayMessage();
-  setTimeout(() => {
-    hideBirthdayMessage();
-    proceedToMainContent();
-  }, 5000);
-}
-
+        detected = true;
+        showBirthdayMessage();
+        setTimeout(() => {
+          hideBirthdayMessage();
+          proceedToMainContent();
+        }, 5000);
       } else if (!detected && Date.now() - startTime < maxWaitTime) {
         requestAnimationFrame(checkVolume);
       } else if (!detected) {
