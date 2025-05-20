@@ -6,7 +6,21 @@
   <title>สุขสันต์วันเกิด น้องอินอิน 💖</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
+<div id="fireworkOverlay"></div>
 <body>
+  <!-- Intro Screen -->
+   <div id="blackOverlay"></div>
+
+<div id="intro-screen">
+  
+  <div class="intro-content">
+    <button id="startBtn">พร้อม</button>
+    <img id="birthdayCake" src="cake.png" alt="เค้กวันเกิด"/>
+    <h2 id="wishText">เป่าเทียนเลยยย</h2>
+  </div>
+  <audio id="introMusic" src="happy.mp3"></audio>
+</div>
+
   <div class="overlay">
     <div class="container">
       <h1>สุขสันต์วันเกิด น้องอินอิน 💖</h1>
@@ -17,10 +31,6 @@
       <img src="inin.png" alt="อินอิน" class="photo"/>
   <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-left" />
   <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-right" />
-
-      <!-- ปุ่มเล่นเพลง -->
-      <!-- ปุ่มเล่นเพลง -->
-<button id="playButton">กดเพื่อเล่นเพลง 🎵</button>
 
 <!-- ลบ iframe YouTube และใช้ audio แทน -->
 <audio id="bgm" src="music.mp3" loop></audio>
@@ -49,71 +59,207 @@
   </div>
 
   <script>
-  // ปุ่มเล่นเพลง
-  // ปุ่มเล่นเพลงด้วยไฟล์ mp3
+const intro = document.getElementById("intro-screen");
+const startBtn = document.getElementById("startBtn");
+const cake = document.getElementById("birthdayCake");
+const wish = document.getElementById("wishText");
+const introMusic = document.getElementById("introMusic");
+
+function startMicDetection() {
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then((stream) => {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
+      const dataArray = new Uint8Array(analyser.fftSize);
+      source.connect(analyser);
+
+      const threshold = 50;
+      let detected = false;
+      const maxWaitTime = 20000;
+      const displayDuration = 10000;
+      const startTime = Date.now();
+
+      const checkVolume = () => {
+        analyser.getByteTimeDomainData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          const val = (dataArray[i] - 128) / 128;
+          sum += val * val;
+        }
+        const volume = Math.sqrt(sum / dataArray.length) * 100;
+
+        if (volume > threshold && !detected) {
+          detected = true;
+          showBirthdayMessage();
+setTimeout(() => {
+  hideBirthdayMessage();
+  proceedToMainContent();
+}, 5000);
+        } else if (!detected && Date.now() - startTime < maxWaitTime) {
+          requestAnimationFrame(checkVolume);
+        } else if (!detected) {
+          proceedToMainContent();
+        }
+      };
+
+      checkVolume();
+    })
+    .catch((err) => {
+      console.error('ไม่สามารถเข้าถึงไมโครโฟน:', err);
+      proceedToMainContent();
+    });
+}
+
+function showBirthdayMessage() {
+  const intro = document.getElementById("intro-screen");
+
+  // เปลี่ยนพื้นหลังเป็น GIF ดอกไม้ไฟ
+  intro.style.backgroundColor = "transparent";
+  intro.style.backgroundImage = "url('https://i.pinimg.com/originals/b7/38/85/b738852f3a04af828898babb2c2c063d.gif')";
+  intro.style.backgroundSize = "cover";
+  intro.style.backgroundRepeat = "no-repeat";
+  intro.style.backgroundPosition = "center";
+
+  // สร้างข้อความ popup
+  const popup = document.createElement("div");
+  popup.className = "birthday-popup";
+  popup.textContent = "สุขสันต์วันเกิด 🎉";
+  intro.appendChild(popup);
+
+  // เปิดเพลงหลักทันที
+  const bgm = document.getElementById("bgm");
+  bgm.volume = 1;
+  bgm.play();
+
+  // ค่อยๆลดเสียงเพลง intro
+  const fadeOut = setInterval(() => {
+    if (introMusic.volume > 0.05) {
+      introMusic.volume -= 0.05;
+    } else {
+      introMusic.volume = 0;
+      introMusic.pause();
+      clearInterval(fadeOut);
+    }
+  }, 250); // 0.05 x 20 = 5 วินาที
+  
+
+  // พื้นดำใหม่ซ้อนทับหลัง 4 วิ
+  const overlay = document.getElementById("blackOverlay");
+  setTimeout(() => {
+    overlay.style.opacity = "1";
+    setTimeout(() => {
+      overlay.style.opacity = "1";
+      setTimeout(() => {
+        overlay.style.opacity = "0";
+      }, 1000);
+    }, 1000);
+  }, 4000);
+}
+
+function hideBirthdayMessage() {
+  const popup = document.querySelector(".birthday-popup");
+  if (popup) popup.remove();
+
+  const intro = document.getElementById("intro-screen");
+  intro.style.background = "black"; // กลับเป็นสีดำ
+}
+
+
+
+
+
+function proceedToMainContent() {
+  intro.style.opacity = 0;
+  setTimeout(() => {
+    intro.style.display = "none";
+  }, 2000);
+}
+
+startBtn.addEventListener("click", () => {
+  startBtn.style.display = "none";
+  cake.style.opacity = "1";
+  introMusic.volume = 0;
+  introMusic.play();
+
+  let volume = 0;
+  const fadeInMusic = setInterval(() => {
+    if (volume < 1) {
+      volume += 0.05;
+      introMusic.volume = volume;
+    } else {
+      clearInterval(fadeInMusic);
+    }
+  }, 200);
+
+  setTimeout(() => {
+    wish.style.opacity = "1";
+  }, 5000);
+
+  setTimeout(() => {
+    startMicDetection(); // เริ่มจับเสียงหลังแสดงเค้ก
+  }, 5000);
+});
+
+// ปุ่มเล่นเพลง
 document.getElementById("playButton").addEventListener("click", () => {
   const bgm = document.getElementById("bgm");
   bgm.play().catch((err) => {
     alert("ไม่สามารถเล่นเพลงได้ อาจต้องคลิกอีกครั้งหรือเบราว์เซอร์บล็อกไว้");
     console.error(err);
   });
-  document.getElementById("playButton").style.display = "none"; // ซ่อนปุ่มหลังคลิก
+  document.getElementById("playButton").style.display = "none";
 });
 
+// เอฟเฟกต์หัวใจ
+document.addEventListener("click", (e) => {
+  const heart = document.createElement("div");
+  heart.textContent = "💖";
+  heart.style.position = "absolute";
+  heart.style.top = e.clientY + "px";
+  heart.style.left = e.clientX + "px";
+  heart.style.fontSize = "30px";
+  heart.style.pointerEvents = "none";
+  heart.style.opacity = "0.8";
+  heart.style.animation = "fadeUp 2s ease-out forwards";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 2000);
+});
 
-  // เอฟเฟกต์หัวใจ
-  document.addEventListener("click", (e) => {
-    const heart = document.createElement("div");
-    heart.textContent = "💖";
-    heart.style.position = "absolute";
-    heart.style.top = e.clientY + "px";
-    heart.style.left = e.clientX + "px";
-    heart.style.fontSize = "30px";
-    heart.style.pointerEvents = "none";
-    heart.style.opacity = "0.8";
-    heart.style.animation = "fadeUp 2s ease-out forwards";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 2000);
-  });
+// ปุ่มกล่องของขวัญ
+document.getElementById("giftBtn").addEventListener("click", () => {
+  const scene = document.getElementById("giftScene");
+  const result = scene.querySelector(".gift-result");
+  const flash = scene.querySelector(".flash");
+  const box = scene.querySelector(".gift-box");
 
-  // ปุ่มเปิดกล่องของขวัญ
-  document.getElementById("giftBtn").addEventListener("click", () => {
-    const scene = document.getElementById("giftScene");
-    const result = scene.querySelector(".gift-result");
-    const flash = scene.querySelector(".flash");
-    const box = scene.querySelector(".gift-box");
+  scene.style.display = "flex";
+  result.style.display = "none";
+  result.style.opacity = 0;
+  flash.style.animation = "none";
+  box.style.animation = "shakeFancy 1.5s ease-in-out";
 
-    // แสดงฉาก
-    scene.style.display = "flex";
+  setTimeout(() => {
+    flash.style.animation = "flashGlow 1.5s ease-out forwards";
+  }, 1500);
 
-    // reset state
-    result.style.display = "none";
-    result.style.opacity = 0;
-    flash.style.animation = "none";
-    box.style.animation = "shakeFancy 1.5s ease-in-out";
-
-    // แสงวาบหลัง 1.5s
-    setTimeout(() => {
-      flash.style.animation = "flashGlow 1.5s ease-out forwards";
-    }, 1500);
-
-    // แสดง me.png หลัง 2.7s พร้อมผูก event
-    setTimeout(() => {
-      result.style.display = "block";
-      result.style.animation = "riseAndFade 1.5s ease-out forwards";
-
-      result.onclick = () => {
-        scene.style.animation = "fadeOut 0.6s ease-out forwards";
-        setTimeout(() => {
-          scene.style.display = "none";
-          scene.style.animation = "";
-          result.style.display = "none";
-          result.style.animation = "";
-          flash.style.animation = "none";
-        }, 600);
-      };
-    }, 2700);
-  });
+  setTimeout(() => {
+    result.style.display = "block";
+    result.style.animation = "riseAndFade 1.5s ease-out forwards";
+    result.onclick = () => {
+      scene.style.animation = "fadeOut 0.6s ease-out forwards";
+      setTimeout(() => {
+        scene.style.display = "none";
+        scene.style.animation = "";
+        result.style.display = "none";
+        result.style.animation = "";
+        flash.style.animation = "none";
+      }, 600);
+    };
+  }, 2700);
+});
 </script>
+
 </body>
 </html>
