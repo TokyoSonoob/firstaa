@@ -14,7 +14,7 @@
 <div id="intro-screen">
   
   <div class="intro-content">
-    <button id="startBtn">พร้อม</button>
+    <button id="startBtn">กดที่นี่</button>
     <img id="birthdayCake" src="cake.png" alt="เค้กวันเกิด"/>
     <h2 id="wishText">เป่าเทียนเลยยย</h2>
   </div>
@@ -23,19 +23,18 @@
 
   <div class="overlay">
     <div class="container">
-      <h1>สุขสันต์วันเกิด น้องอินอิน 💖</h1>
-      <p>ขอให้แฟนมีความสุขมากๆ อยากรักแฟนไปเรื่อยๆ</p>
-      <p>ถ้าแฟนงอนเราจะง้อ รักแฟนที่สุดดดด~</p>
-      <p>ไม่อยากให้แฟนหายไปไหน แงงงงงงงง</p>
-      <p>แฟนเป็นที่1 ของเราเสมอออ จุ้บพี่อินอินน</p>
-      <img src="inin.png" alt="อินอิน" class="photo"/>
+  <h1>สุขสันต์วันเกิด น้องอินอิน 💖</h1>
+  <div id="typedText" class="typed-text"></div>
+  <img src="inin.png" alt="อินอิน" class="photo"/>
   <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-left" />
   <img src="https://i.pinimg.com/originals/a5/7b/f9/a57bf940269ffbf167f8b0c5fd50315c.gif" class="sticker bottom-right" />
 
 <!-- ลบ iframe YouTube และใช้ audio แทน -->
 <audio id="bgm" src="music.mp3" loop></audio>
 
-<button id="giftBtn">🎁 รับของขวัญ</button>
+<button id="giftBtn">รับของขวัญ</button>
+<button id="gachaBtn">กล่องจุ่มมม</button>
+<div id="gachaResult" class="gacha-result"></div>
 
 <!-- กล่องของขวัญ + เอฟเฟกต์ -->
 <div class="gift-scene" id="giftScene">
@@ -154,6 +153,13 @@ function showBirthdayMessage() {
   popup.textContent = "สุขสันต์วันเกิด 🎉";
   intro.appendChild(popup);
 
+  // ปิดไมโครโฟน (ทันทีหลังแสดง popup)
+  if (micStreamRef) {
+    micStreamRef.getTracks().forEach(track => track.stop());
+    micStreamRef = null;
+    console.log("🔇 ปิดไมโครโฟนเรียบร้อยแล้ว");
+  }
+
   // เล่นเพลงหลัก
   const bgm = document.getElementById("bgm");
   bgm.volume = 1;
@@ -235,31 +241,50 @@ document.addEventListener("click", (e) => {
   heart.style.fontSize = "30px";
   heart.style.pointerEvents = "none";
   heart.style.opacity = "0.8";
+  heart.style.zIndex = "10001"; // ✅ ใส่ z-index สูงกว่าสิ่งอื่นทั้งหมด
   heart.style.animation = "fadeUp 2s ease-out forwards";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 2000);
 });
+
 
 // ปุ่มกล่องของขวัญ
 document.getElementById("giftBtn").addEventListener("click", () => {
   const scene = document.getElementById("giftScene");
   const result = scene.querySelector(".gift-result");
   const flash = scene.querySelector(".flash");
-  const box = scene.querySelector(".gift-box");
+
+  // หากกล่องไม่มีอยู่แล้ว สร้างใหม่ก่อนเริ่ม
+  let box = scene.querySelector(".gift-box");
+  if (!box) {
+    box = document.createElement("img");
+    box.src = "https://images.icon-icons.com/2639/PNG/512/gif_box_icon_159270.png";
+    box.alt = "กล่องของขวัญ";
+    box.className = "gift-box";
+    scene.insertBefore(box, result);
+  }
 
   scene.style.display = "flex";
   result.style.display = "none";
   result.style.opacity = 0;
   flash.style.animation = "none";
-  box.style.animation = "shakeFancy 1.5s ease-in-out";
+
+  // รีเซ็ต animation กล่อง
+  box.style.animation = "none";
+  void box.offsetWidth; // force reflow
+  box.style.animation = "shakeFancyLong 2.5s ease-in-out";
 
   setTimeout(() => {
-    flash.style.animation = "flashGlow 1.5s ease-out forwards";
-  }, 1500);
+    flash.style.animation = "flashGlowBig 1.2s ease-out forwards";
+  }, 2500);
 
   setTimeout(() => {
     result.style.display = "block";
     result.style.animation = "riseAndFade 1.5s ease-out forwards";
+
+    // ลบกล่องออกจาก DOM
+    box.remove();
+
     result.onclick = () => {
       scene.style.animation = "fadeOut 0.6s ease-out forwards";
       setTimeout(() => {
@@ -270,8 +295,104 @@ document.getElementById("giftBtn").addEventListener("click", () => {
         flash.style.animation = "none";
       }, 600);
     };
-  }, 2700);
+  }, 3700);
 });
+
+
+
+
+function typeTextByChar(containerId, message, speed = 120) {
+  const container = document.getElementById(containerId);
+  let i = 0;
+
+  function typeChar() {
+    if (i < message.length) {
+      if (message[i] === "\n") {
+        container.appendChild(document.createElement("br"));
+      } else {
+        const span = document.createElement("span");
+        span.textContent = message[i];
+        span.style.opacity = 0;
+        span.style.transition = "opacity 0.3s ease";
+        container.appendChild(span);
+
+        setTimeout(() => {
+          span.style.opacity = 1;
+        }, 10);
+      }
+      i++;
+      setTimeout(typeChar, speed);
+    }
+  }
+
+  container.innerHTML = "";
+  typeChar();
+}
+function proceedToMainContent() {
+  intro.style.opacity = 0;
+  setTimeout(() => {
+    intro.style.display = "none";
+    typeTextByChar("typedText", `ขอให้แฟนมีความสุขมากๆ อยากรักแฟนไปเรื่อยๆ\nถ้าแฟนงอนเราจะง้อ รักแฟนที่สุดดดด~\nไม่อยากให้แฟนหายไปไหน แงงงงงงงง\nแฟนเป็นที่1 ของเราเสมอออ จุ้บๆๆๆพี่อินอินนนนน`);
+  }, 2000);
+}
+
+const gachaItems = [
+  "จุ๊บแก้ม",
+  "กอด",
+  "สั่งอีกคน",
+  "ทำตามที่บอก",
+  "กินเค้ก1คำ",
+  "ป้อนเค้ก1คำ",
+  "ให้อีกคนหลับตา",
+  "กัดดด",
+  "ปิดตาาา อีกคนทำอะไรก็ได้",
+  "จุ๊บที่ไหนก็ได้",
+  "หอมแก้ม",
+  "ลูบหัว",
+  "ทำผมเป็นรูปหัวใจ",
+  "กอดดดดด",
+  "อ้อนน",
+  "พูดหวานๆ",
+  "หอมแก้ม",
+  "ยิ้มหน่อย"
+];
+
+document.getElementById("gachaBtn").addEventListener("click", () => {
+  const resultBox = document.getElementById("gachaResult");
+  let count = 0;
+  let maxCount = 40;
+  let baseDelay = 50;
+  let delay = baseDelay;
+
+  resultBox.style.color = "#FFD700"; // เริ่มด้วยสีเหลือง
+  resultBox.classList.remove("gacha-bounce"); // ล้างก่อนเริ่ม
+
+  function spinGacha() {
+    const item = gachaItems[Math.floor(Math.random() * gachaItems.length)];
+    resultBox.textContent = `🎁 ${item}`;
+
+    count++;
+    if (count < maxCount) {
+      delay += (7000 / maxCount - baseDelay) / maxCount;
+      setTimeout(spinGacha, delay);
+    } else {
+      // เปลี่ยนสีและเต้น
+      setTimeout(() => {
+        resultBox.style.color = "#ff69b4";
+        resultBox.classList.add("gacha-bounce");
+        setTimeout(() => {
+          resultBox.classList.remove("gacha-bounce");
+        }, 600);
+      }, 200);
+    }
+  }
+
+  spinGacha();
+});
+
+
+
+
 </script>
 </body>
 </html>
