@@ -117,9 +117,12 @@ button#playButton:hover {
 
 .gift-box {
   width: 180px;
-  animation: shakeFancy 1.5s ease-in-out;
   z-index: 2;
+  animation: shakeFancyLong 2.5s ease-in-out;
+  filter: drop-shadow(0 0 10px pink) drop-shadow(0 0 20px hotpink);
+  transition: transform 0.5s ease;
 }
+
 
 
 .flash {
@@ -145,24 +148,30 @@ button#playButton:hover {
 }
 
 /* กล่องเขย่าแบบอลัง */
-@keyframes shakeFancy {
-  0% { transform: rotate(0deg); }
-  20% { transform: rotate(-5deg); }
-  40% { transform: rotate(5deg); }
-  60% { transform: rotate(-3deg); }
-  80% { transform: rotate(3deg); }
-  100% { transform: rotate(0deg); }
+@keyframes shakeFancyLong {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(-8deg); }
+  20% { transform: rotate(8deg); }
+  30% { transform: rotate(-6deg); }
+  40% { transform: rotate(6deg); }
+  50% { transform: rotate(-4deg); }
+  60% { transform: rotate(4deg); }
+  70% { transform: rotate(-2deg); }
+  80% { transform: rotate(2deg); }
+  90% { transform: rotate(-1deg); }
 }
+
 
 
 /* แสงวาบอลัง */
-@keyframes flashGlow {
+@keyframes flashGlowBig {
   0% { opacity: 0; transform: scale(0.5); }
-  25% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.8); }
-  75% { opacity: 0.3; transform: scale(2.5); }
-  100% { opacity: 0; transform: scale(3); }
+  25% { opacity: 1; transform: scale(1.5); }
+  50% { opacity: 0.9; transform: scale(2); }
+  75% { opacity: 0.4; transform: scale(2.8); }
+  100% { opacity: 0; transform: scale(3.2); }
 }
+
 
 /* ของขวัญลอยขึ้น */
 @keyframes riseAndFade {
@@ -354,4 +363,47 @@ body.bg-transition {
   opacity: 0;
   pointer-events: none;
   transition: opacity 1s ease;
+}
+.typed-text {
+  font-size: 18px;
+  color: #333;
+  white-space: pre-wrap;
+  text-align: center;
+  line-height: 1.6;
+  margin-top: 20px;
+}
+#gachaBtn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  background-color: #ffd700;
+  color: #333;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  transition: background-color 0.3s ease;
+}
+#gachaBtn:hover {
+  background-color: #ffcc00;
+}
+
+.gacha-result {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff69b4;
+  animation: fadeIn 0.6s ease-in;
+  text-shadow: 0 0 5px pink;
+}
+.gacha-bounce {
+  animation: bounceScale 0.6s ease-out both;
+  transform-origin: center;
+}
+
+@keyframes bounceScale {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.1); }
+  60%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
 }
